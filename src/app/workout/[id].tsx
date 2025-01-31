@@ -1,14 +1,17 @@
-import { useLocalSearchParams } from 'expo-router';
-import { View, Text } from '@/components/general/Themed';
-import dummyWorkouts from '@/data/dummyWorkouts';
-import WorkoutExerciseItem from '@/components/workouts/WorkoutExerciseItem';
-import { FlatList, StyleSheet } from 'react-native';
-import dayjs from 'dayjs';
+import { useLocalSearchParams } from "expo-router";
+import { View, Text } from "@/components/general/Themed";
+import React from "react";
+import WorkoutExerciseItem from "@/components/workouts/WorkoutExerciseItem";
+import { FlatList, StyleSheet } from "react-native";
+import dayjs from "dayjs";
+import { useWorkouts } from "@/store";
 
 export default function WorkoutScreen() {
   const { id } = useLocalSearchParams();
 
-  const workout = dummyWorkouts.find((w) => w.id === id);
+  const workout = useWorkouts((state) =>
+    state.workouts.find((workout) => workout.id === id)
+  );
 
   if (!workout) {
     return <Text>Workout not found</Text>;
@@ -23,7 +26,7 @@ export default function WorkoutScreen() {
         <>
           <Text style={styles.title}>Workout details</Text>
           <Text style={styles.date}>
-            {dayjs(workout.createdAt).format('HH:mm dddd, D MMM')}
+            {dayjs(workout.createdAt).format("HH:mm dddd, D MMM")}
           </Text>
         </>
       }
@@ -34,7 +37,7 @@ export default function WorkoutScreen() {
 const styles = StyleSheet.create({
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
   },
   date: {
